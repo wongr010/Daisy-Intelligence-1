@@ -103,8 +103,7 @@ def get_move(timeout,data):
     #         
         
     
-    
-    #validMoves=findValidMoves(squares,nextsquare)
+        #validMoves=findValidMoves(squares,nextsquare)
     #return choice(validMoves)
     
     #test:
@@ -171,7 +170,16 @@ def Strategy(nextsquare, squares, OPPONENT):
                     
                     
                 
-      
+		else: #count%2 != 0
+            if (count == 1): #checking if we are playing for the first time as Player2
+            	if (littleSquare[4] == OPPONENT): #this is case 2 of Krystal's diagram
+                    return convertSquareID_to_BoardID (nextsquare, 0) #place our thing on index 0
+                elif (littleSquare[0] == OPPONENT or littleSquare[2] == OPPONENT or littleSquare[6] == OPPONENT or littleSquare[8] == OPPONENT): #case 1    
+					 return convertSquareID_to_BoardID (nextsquare, 4)
+            
+				else:
+                    return convertSquareID_to_BoardID (nextsquare, 0) #place our thing on index 0
+                       
     
 
 #check if you are playing first or second
