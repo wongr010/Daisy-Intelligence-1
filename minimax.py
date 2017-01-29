@@ -1,3 +1,5 @@
+import copy
+
 class square:
 	def __init__(self,ID,val):
 		self.ID = ID
@@ -12,7 +14,7 @@ class square:
 
 def findValidMoves(squares,nextsquare):
 	vm = []
-	for i in range(81):
+	for i in range(80):
 		if squares[i].bigSq==nextsquare or nextsquare>8:  #Have to play in the next square, unless you can play anywhere
 			if squares[i].value == 0: #Square must be empty
 				if isBoardWon(getBigBoard(squares,squares[i].bigSq))==0: #Can't play in a won board
@@ -22,8 +24,10 @@ def findValidMoves(squares,nextsquare):
 
 
 def isBoardWon(squares):
+  
 	#Input: squares = 8 item list of squares 
 	#Output: 0 if not win, 1 if 1 won, 2 if 2 won
+
 	def compareSquares(squares,s1,s2,s3,v):
 		if squares[s1]==squares[s2] and squares[s1]==squares[s3] and squares[s1]==v:
 			return True
@@ -71,70 +75,123 @@ def getBigBoard(squares,bigSq):
 
 def choose(current_state, data):
 		moves=[]
-		moves=findValidMoves(temp_board, int(data[1]))
+	
+		moves=findValidMoves(current_state, data)
+		nummoves=len(moves)
+		
 		for i in range(0, nummoves):
 			temp_board=current_state
+			#print(moves[i])
 			new_state=change_state(temp_board, moves[i], 1)
-			score=MyMove(current_state, data)
+			score=YourMove(new_state, data)
 			if (score==10): return moves[i]
+			elif (score==0): nochoice=moves[i]
+			
+		return nochoice
 		
 
 def change_state(current_state, move, player):
-	current_state[move]=player
+	current_state[move].value=player
 	return current_state
 
 	
 def MyMove(current_state, data):
 	
-	if isBoardFull(new_state) or (isBoardWon(new_state) != 0):
-		if isBoardWon(new_state)==1:
+	if isBoardFull(getBigBoard(current_state,data)) or (isBoardWon(getBigBoard(current_state,data)) != 0):
+		if isBoardWon(getBigBoard(current_state, data))==1:
 			return 10
-		elif isBoardWon(current_state)==2:
+		elif isBoardWon(getBigBoard(current_state, data))==2:
 			return -10
 		else: 
 			return 0
 	
 	moves=[]
 	temp_board=current_state
-	moves=findValidMoves(temp_board, int(data[1]))
-	nummoves=len(i)
+	moves=findValidMoves(temp_board, data)
+	nummoves=len(moves)
 	best=-1000
 	
 	for i in range(0, nummoves):
 		new_state=change_state(temp_board, moves[i], 1)
-		boardeval=YourMove(new_state, data, move)
+		boardeval=YourMove(new_state, data)
 		
 		if boardeval>best:
 			best=boardeval
-			optimum=moves[i]
 	
 	return best
 	
-def YourMove(current_state, data, bestmove):
+def YourMove(current_state, data):
 	
-	if isBoardFull(current_state) or (isBoardWon(current_state) != 0):
-		if isBoardWon(cuurent_state)==1:
+	if isBoardFull(getBigBoard(current_state,data)) or (isBoardWon(getBigBoard(current_state,data)) != 0):
+		if isBoardWon(getBigBoard(current_state, data))==1:
 			return 10
-		elif isBoardWon(current_state)==2:
+		elif isBoardWon(getBigBoard(current_state, data))==2:
 			return -10
 		else: 
 			return 0
-			
-	if isBoardFull(current_state) or (isBoardWon(current_state) != 0):
-		return Score(current_state)
+
 	moves=[]
 	temp_board=current_state
-	moves=findValidMoves(temp_board, int(data[1]))
-	nummoves=len(i)
+	moves=findValidMoves(temp_board, data)
+	nummoves=len(moves)
 	best=1000
 	
 	for i in range(0, nummoves):
 		new_state=change_state(temp_board, moves[i], 2)
-		boardeval=MyMove(new_state, data, move)
+		boardeval=MyMove(new_state, data)
 		
 		if boardeval<best:
 			best=boardeval
-			optimum=moves[i]
 	
 	return best
 	
+"""	def get_move(timeout,data):
+	PLAYER=int(data[0])
+	nextsquare=int(data[1])
+	squares = []
+	for i in range(2,83): 
+		squares.append(square(i-2,int(data[i])))
+  return squares"""
+  
+time=input('Time is: ')
+starter=input('starting player is ')
+data=input('board is: ')
+data=str(data)
+
+PLAYER=int(data[0])
+nextsquare=int(data[1])
+squares = []
+for i in range(2,83): 
+  squares.append(square(i-2,int(data[i])))
+
+if starter==1:
+  iStart=True
+  
+else:
+  iStart=False
+		
+while True:
+  new_state=copy.deepcopy(squares)
+  if iStart:
+    move1=choose(new_state, nextsquare)
+    print('move 1 is ')
+    print(move1)
+    new_state=change_state(squares, move1, 1)
+    iStart=False
+    if isBoardWon(getBigBoard(squares, nextsquare))!=0 or isBoardFull(getBigBoard(squares, nextsquare)):
+      break
+    
+  else:
+    move2=input('Your move: ')
+    move2=int(move2)
+    
+    new_state=change_state(squares, move2, 2)
+    iStart=True
+    if isBoardWon(getBigBoard(squares, nextsquare))!=0 or isBoardFull(getBigBoard(squares, nextsquare)):
+      break
+	
+print("Winner is")
+if isBoardWon(getBigBoard(squares, nextsquare))==0:
+  print("There is a tie")
+else:
+  print(isBoardWon(getBigBoard(squares, nextsquare)))
