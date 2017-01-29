@@ -1,7 +1,7 @@
 #check if our robot needs to start a game on a new board
 def choose_new_board(game_status):
     #second_num = str(game_status)
-    if game_staus[1] == '9' :
+    if game_status[1] == '9' :
         return True
     else:
         return False
@@ -14,7 +14,7 @@ def is_opponent_winning(game_status):
     small_board_array = [];
     #game_status = str(game_status)
     
-    if game_status[0] == 1:
+    if game_status[0] == '1':
         opponent_mark = '2'
     else: 
         opponent_mark = '1'
@@ -53,4 +53,4 @@ def is_opponent_winning(game_status):
          
             
 #this is a test case
-print (is_opponent_winning (100010100005))
+print (is_opponent_winning ('100010100005')
