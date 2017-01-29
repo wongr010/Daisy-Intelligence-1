@@ -1,7 +1,7 @@
 #check if our robot needs to start a game on a new board
 def choose_new_board(game_status):
-    second_num = str(game_status)
-    if second_num[1] == 9 :
+    #second_num = str(game_status)
+    if game_staus[1] == '9' :
         return True
     else:
         return False
@@ -12,7 +12,7 @@ in the next round anywhere"""
 
 def is_opponent_winning(game_status):
     small_board_array = [];
-    game_status = str(game_status)
+    #game_status = str(game_status)
     
     if game_status[0] == 1:
         opponent_mark = '2'
